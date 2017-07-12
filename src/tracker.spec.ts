@@ -1,7 +1,8 @@
 import test from 'ava';
 import { GoogleAnalyticsTracker } from './tracker';
 
-test('Should throw if no identity', async (t) => {
+test('Should throw if calling .track() before .identify()', async (t) => {
   const tracker = new GoogleAnalyticsTracker();
-  await t.throws(tracker.track(null));
+  const err = await t.throws(tracker.track(null));
+  t.is(err.message, 'Visitor not set. Please call .identify() first');
 });
