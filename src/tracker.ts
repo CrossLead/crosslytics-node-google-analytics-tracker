@@ -1,22 +1,22 @@
-import { Identity, TrackedEvent, Tracker } from 'crosslytics';
+import { TrackedEvent, Tracker } from 'crosslytics';
 import * as ua from 'universal-analytics';
-import { isNumber } from 'util';
+import { GoogleAnalyticsIdentity } from './identity';
 import { getLabelAndValue } from './util/getLabelAndValue';
-
-export interface GoogleAnalyticsIdentity extends Identity {
-  traits: {
-    email: string,
-    name: string,
-    accountId: string,
-  } & ua.VisitorOptions;
-}
 
 export class GoogleAnalyticsTracker implements Tracker {
   protected visitor: ua.Visitor;
 
-  public identify(identity: GoogleAnalyticsIdentity) {
-    // TODO: Include organization
-    this.visitor = ua(identity.traits.accountId, identity.userId, identity.traits);
+  // tslint:disable:max-line-length
+  /**
+   * @param identity Must include the Google Analytics accountId
+   * @param persistentParams {@link https://github.com/peaksandpies/universal-analytics/blob/master/AcceptableParams.md}
+   */
+  // tslint:enable:max-line-length
+  public identify(identity: GoogleAnalyticsIdentity, persistentParams: { [key: string]: any } = {}) {
+    this.visitor = ua(identity.traits.accountId, identity.userId, { strictCidFormat: false });
+    Object.keys(persistentParams).forEach((key) => {
+      this.visitor.set(key, persistentParams[key]);
+    });
   }
 
   public async track<T>(event: TrackedEvent<T>) {
