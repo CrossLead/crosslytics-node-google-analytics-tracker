@@ -1,22 +1,19 @@
-import { TrackedEvent, Tracker } from 'crosslytics';
+import { Identity, TrackedEvent, Tracker } from 'crosslytics';
 import * as ua from 'universal-analytics';
-import { GoogleAnalyticsIdentity } from './identity';
 import { getLabelAndValue } from './util/getLabelAndValue';
 
 export class GoogleAnalyticsTracker implements Tracker {
+  /**
+   * @see {@link https://github.com/peaksandpies/universal-analytics/blob/master/AcceptableParams.md}
+   */
+  public persistentParams: { [key: string]: any };
   protected visitor: ua.Visitor;
 
-  // tslint:disable:max-line-length
-  /**
-   * @param identity Must include the Google Analytics accountId
-   * @param persistentParams {@link https://github.com/peaksandpies/universal-analytics/blob/master/AcceptableParams.md}
-   */
-  // tslint:enable:max-line-length
-  public identify(identity: GoogleAnalyticsIdentity, persistentParams: { [key: string]: any } = {}) {
-    this.visitor = ua(identity.traits.accountId, identity.userId, { strictCidFormat: false });
-    Object.keys(persistentParams).forEach((key) => {
-      this.visitor.set(key, persistentParams[key]);
-    });
+  constructor(public id: string) {}
+
+  public identify(identity: Identity) {
+    this.visitor = ua(this.id);
+    this.visitor.set('uid', identity.userId);
   }
 
   public async track<T>(event: TrackedEvent<T>) {
@@ -24,12 +21,22 @@ export class GoogleAnalyticsTracker implements Tracker {
       throw new Error('Visitor not set. Please call .identify() first');
     }
 
+    Object.keys(this.persistentParams).forEach((key) => {
+      this.visitor.set(key, this.persistentParams[key]);
+    });
+
     const params: ua.EventParams = {
       ea: event.name,
       ec: event.category,
     };
 
     const labelAndVal = getLabelAndValue(event);
+    if (labelAndVal[0] !== undefined) {
+      params.el = labelAndVal[0];
+    }
+    if (labelAndVal[1] !== undefined) {
+      params.ev = labelAndVal[1];
+    }
 
     return new Promise<void>((resolve, reject) => {
       this.visitor.event(params, (err) => {

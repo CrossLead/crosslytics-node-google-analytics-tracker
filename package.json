@@ -1,6 +1,6 @@
 {
-  "name": "crosslytics-node-boilerplate-tracker",
-  "version": "0.0.0",
+  "name": "crosslytics-node-google-analytics-tracker",
+  "version": "0.0.1",
   "description": "Node.js Crosslytics Tracker for Google Analytics",
   "license": "Apache-2.0",
   "repository": {
@@ -32,7 +32,6 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
-    "crosslytics": "^1.0.0",
     "universal-analytics": "^0.4.13"
   },
   "devDependencies": {
@@ -62,5 +61,8 @@
     "exclude": [
       "**/*.{spec,e2e}.js"
     ]
+  },
+  "peerDependencies": {
+    "crosslytics": "^1.0.0"
   }
 }
