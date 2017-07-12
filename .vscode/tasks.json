@@ -16,9 +16,6 @@
       "taskName": "lint"
     },
     {
-      "taskName": "prettier"
-    },
-    {
       "taskName": "coverage"
     },
     {
