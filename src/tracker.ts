@@ -9,18 +9,15 @@ export class GoogleAnalyticsTracker implements Tracker {
   public persistentParams: { [key: string]: any };
   protected visitor: ua.Visitor;
 
-  constructor(public id: string) {}
+  constructor(public id: string) {
+    this.visitor = ua(this.id);
+  }
 
   public identify(identity: Identity) {
-    this.visitor = ua(this.id);
     this.visitor.set('uid', identity.userId);
   }
 
   public async track<T>(event: TrackedEvent<T>) {
-    if (!this.visitor) {
-      throw new Error('Visitor not set. Please call .identify() first');
-    }
-
     Object.keys(this.persistentParams).forEach((key) => {
       this.visitor.set(key, this.persistentParams[key]);
     });
