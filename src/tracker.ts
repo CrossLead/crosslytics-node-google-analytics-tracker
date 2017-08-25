@@ -1,4 +1,4 @@
-import { Identity, TrackedEvent, Tracker } from 'crosslytics';
+import { Identity, Page, TrackedEvent, Tracker } from 'crosslytics';
 import * as ua from 'universal-analytics';
 import { getLabelAndValue } from './util/getLabelAndValue';
 
@@ -18,10 +18,6 @@ export class GoogleAnalyticsTracker implements Tracker {
   }
 
   public async track<T>(event: TrackedEvent<T>) {
-    Object.keys(this.persistentParams).forEach((key) => {
-      this.visitor.set(key, this.persistentParams[key]);
-    });
-
     const params: ua.EventParams = {
       ea: event.name,
       ec: event.category,
@@ -36,7 +32,26 @@ export class GoogleAnalyticsTracker implements Tracker {
     }
 
     return new Promise<void>((resolve, reject) => {
-      this.visitor.event(params, (err) => {
+      this.visitor.event({...this.persistentParams, ...params}, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  public async page(page: Page) {
+    // Fancy: https://github.com/tc39/proposal-object-rest-spread/issues/45
+    const params: ua.PageviewParams = {
+      dl: page.url,
+      ...page.title && { dt: page.title },
+      ...page.referrer && { dr: page.referrer},
+    };
+
+    return new Promise<void>((resolve, reject) => {
+      this.visitor.pageview({...this.persistentParams, ...params}, (err) => {
         if (err) {
           reject(err);
         } else {

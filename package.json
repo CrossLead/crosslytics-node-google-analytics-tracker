@@ -1,6 +1,6 @@
 {
   "name": "crosslytics-node-google-analytics-tracker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js Crosslytics Tracker for Google Analytics",
   "license": "Apache-2.0",
   "repository": {
@@ -39,7 +39,7 @@
     "@types/universal-analytics": "^0.4.0",
     "ava": "^0.20.0",
     "coveralls": "^2.0.0",
-    "crosslytics": "^1.0.0",
+    "crosslytics": "^2.0.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.0.0",
     "tslint": "^5.0.0",
@@ -64,6 +64,6 @@
     ]
   },
   "peerDependencies": {
-    "crosslytics": "^1.0.0"
+    "crosslytics": "^2.0.0"
   }
 }
