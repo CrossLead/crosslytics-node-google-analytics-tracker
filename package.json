@@ -1,6 +1,6 @@
 {
   "name": "crosslytics-node-google-analytics-tracker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node.js Crosslytics Tracker for Google Analytics",
   "license": "Apache-2.0",
   "repository": {
