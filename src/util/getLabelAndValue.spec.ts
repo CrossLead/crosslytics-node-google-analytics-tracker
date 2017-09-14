@@ -8,10 +8,11 @@ interface LightsaberArgs {
   'Inscription'?: string;
 }
 
-class LightsaberBuilt extends TrackedEvent<LightsaberArgs> {
+class LightsaberBuilt implements TrackedEvent<LightsaberArgs> {
   public name = 'Lightsaber Built';
   public category = 'Lightsabers';
   public argPriority = new Array<keyof LightsaberArgs>('Inscription', 'Color', 'Blades');
+  constructor(public args: LightsaberArgs) {}
 }
 
 test('Should use first number arg as value', (t) => {

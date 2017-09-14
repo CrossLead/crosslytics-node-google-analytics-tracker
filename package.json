@@ -39,7 +39,7 @@
     "@types/universal-analytics": "^0.4.0",
     "ava": "^0.20.0",
     "coveralls": "^2.0.0",
-    "crosslytics": "^2.0.0",
+    "crosslytics": "3.0.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.0.0",
     "tslint": "^5.0.0",
@@ -64,6 +64,6 @@
     ]
   },
   "peerDependencies": {
-    "crosslytics": "^2.0.0"
+    "crosslytics": "^3.0.0"
   }
 }
